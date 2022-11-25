@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     Rigidbody rigidbody;
-    public int moveSpeed = 10, rightLeftSpeed = 100;
+    public int moveSpeed = 10, rightLeftSpeed = 100, years = 0, yearsPlus,people = 0,peoplePlus;
     Vector3 lastMousePos, firstMousePos;
     public float bounds = 5;
     public Transform CloneTransform;
@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] 
     public GameObject Clone;
-    public bool active = false;
+    public bool active = true;
 
     void Awake()
     {
@@ -23,27 +23,13 @@ public class PlayerController : MonoBehaviour
     }
     private void Start()
     {
-
-    }
-
-    private void FixedUpdate()
-    {
-        //StartCoroutine(RockFire());
-        if (active == false)
-        {
-            StartCoroutine(RockFire());
-        }
-        else
-        {
-
-            Destroy(Clone);
-            active = false;
-
-        }
+        StartCoroutine(RockFire());
     }
     
     void Update()
     {
+
+        //MOVE
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -bounds, bounds), transform.position.y, transform.position.z);
         transform.position += transform.forward * Time.deltaTime * moveSpeed;
 
@@ -66,19 +52,36 @@ public class PlayerController : MonoBehaviour
             transform.position += new Vector3(dif.x, 0, 0) * Time.deltaTime * rightLeftSpeed;
             firstMousePos = lastMousePos;
         }
+        //MOVE
+    }
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Trigger")
+        {
+            yearsPlus = other.GetComponent<Years_People>().YearsPlus;
+            peoplePlus = other.GetComponent<Years_People>().PeoplePlus;
 
+            Destroy(other.gameObject);
 
+            years = yearsPlus + years;
+            people = peoplePlus + people;
+
+            Debug.Log(years);
+            Debug.Log(people);
+        }
     }
 
     public IEnumerator RockFire()
     {
 
-        if (active == false)
+        while (active == true)
         {
-            yield return new WaitForSeconds(2);
+            
             Clone = Instantiate(RockPrefab, CloneTransform.position, Quaternion.identity) as GameObject;
             Clone.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 100), ForceMode.Impulse);
-            active = true;
+            yield return new WaitForSeconds(1f);
+            Destroy(Clone);
+            yield return new WaitForSeconds(0.5f);
         }
 
 
