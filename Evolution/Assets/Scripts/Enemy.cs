@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int enemyForce = 0;
     void Start()
     {
         
@@ -18,6 +17,12 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.tag == "ClonePlayer" || collision.gameObject.tag == "Clone")
+        {
+            Destroy(collision.gameObject);
+            Destroy(this.gameObject);
+        }
+
 
     }
 }

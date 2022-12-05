@@ -1,89 +1,77 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
-    Rigidbody rigidbody;
-    public int moveSpeed = 10, rightLeftSpeed = 100, years = 0, yearsPlus,people = 0,peoplePlus;
-    Vector3 lastMousePos, firstMousePos;
-    public float bounds = 5;
-    public Transform CloneTransform;
-    public GameObject RockPrefab;
 
+    public int years = 0, yearsPlus, people = 0, peoplePlus;
 
-    [HideInInspector] 
-    public GameObject Clone;
-    public bool active = true;
+    [HideInInspector] public GameObject Clone;
+    [HideInInspector] public bool  TriggerActive = false;
+    [HideInInspector] public Rigidbody rb;
+
 
     void Awake()
     {
-        rigidbody = this.gameObject.GetComponent<Rigidbody>();
+        rb = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
 
     }
-    private void Start()
-    {
-        StartCoroutine(RockFire());
-    }
+
     
     void Update()
     {
 
-        //MOVE
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -bounds, bounds), transform.position.y, transform.position.z);
-        transform.position += transform.forward * Time.deltaTime * moveSpeed;
-
-
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 pos = Input.mousePosition;
-            pos.z = 10;
-            firstMousePos = Camera.main.ScreenToWorldPoint(pos);
-
-        }
-
-        if (Input.GetMouseButton(0))
-        {
-            Vector3 pos = Input.mousePosition;
-            pos.z = 10;
-            lastMousePos = Camera.main.ScreenToWorldPoint(pos);
-            Vector3 dif = lastMousePos - firstMousePos;
-            transform.position += new Vector3(dif.x, 0, 0) * Time.deltaTime * rightLeftSpeed;
-            firstMousePos = lastMousePos;
-        }
-        //MOVE
     }
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Trigger")
+        if (other.gameObject.tag == "TriggerYear")
         {
-            yearsPlus = other.GetComponent<Years_People>().YearsPlus;
-            peoplePlus = other.GetComponent<Years_People>().PeoplePlus;
+           if(TriggerActive == false)
+            {
+                yearsPlus = other.GetComponent<Years_People>().YearsPlus;
+                Destroy(other.gameObject);
+                years = yearsPlus + years;
+                Debug.Log(years + "Yýl");
+                StartCoroutine(TrActive());
+            }
 
-            Destroy(other.gameObject);
-
-            years = yearsPlus + years;
-            people = peoplePlus + people;
-
-            Debug.Log(years);
-            Debug.Log(people);
         }
+        if (other.gameObject.tag == "TriggerPeople")
+        {
+            if(TriggerActive == false)
+            {
+                peoplePlus = other.GetComponent<Years_People>().PeoplePlus;
+                Destroy(other.gameObject);
+                people = peoplePlus + people;
+                gameObject.GetComponent<PlayerClone>().Clone();
+                Debug.Log(people+"Kiþi");
+                StartCoroutine(TrActive());
+            }
+
+
+        }
+
     }
 
-    public IEnumerator RockFire()
+    public void OnTriggerStay(Collider other)
     {
-
-        while (active == true)
+        if (other.gameObject.tag == "BarierrsPlane")
         {
-            
-            Clone = Instantiate(RockPrefab, CloneTransform.position, Quaternion.identity) as GameObject;
-            Clone.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 100), ForceMode.Impulse);
-            yield return new WaitForSeconds(1f);
-            Destroy(Clone);
-            yield return new WaitForSeconds(0.5f);
+            Debug.Log("geldi");
+            Destroy(GameObject.FindWithTag("ClonePlayer"));
         }
+    }
 
+    public IEnumerator TrActive()
+    {
+        TriggerActive = true;
+        yield return new WaitForSeconds(0.5f);
+        TriggerActive = false;
 
     }
+
+
 }

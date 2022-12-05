@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Clone
   - Trigger
+  - TriggerYear
+  - TriggerPeople
+  - ClonePlayer
+  - BarierrsPlane
   layers:
   - Default
   - TransparentFX

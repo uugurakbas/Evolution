@@ -3,36 +3,34 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
+using System;
 
-public class Shooting : MonoBehaviour
+public class Shooting : MonoBehaviour   
 {
-    public int Force,years,people,barrierForce;
-    [HideInInspector] public GameObject Player;
-    public TextMeshPro Text;
 
-    void Awake()
+    public GameObject RockPrefab;
+    public Transform CloneTransform;
+    [HideInInspector]
+    public GameObject Clone;
+    public bool active = true;
+
+    private void Start()
     {
-        Player = GameObject.FindWithTag("Player");
-        Text.text = barrierForce.ToString();
+        StartCoroutine(RockFire());
     }
-
-   
-    void Update()
+    public IEnumerator RockFire()
     {
-        years = Player.GetComponent<PlayerController>().years;
-        people = Player.GetComponent<PlayerController>().people;
 
-        Force = (years / 50) * 2;
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.tag == "Clone")
+        while (active == true)
         {
-            barrierForce = barrierForce - Force;
-            if(barrierForce == 0)
-            {
-                Destroy(this.gameObject);
-            }
+
+            Clone = Instantiate(RockPrefab, CloneTransform.position, Quaternion.identity) as GameObject;
+            Clone.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 100), ForceMode.Impulse);
+            yield return new WaitForSeconds(0.7f);
+            Destroy(Clone);
+            yield return new WaitForSeconds(0.35f);
         }
+
+
     }
 }
