@@ -5,11 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Clone
-  - Trigger
   - TriggerYear
   - TriggerPeople
   - ClonePlayer
   - BarierrsPlane
+  - Enemy
+  - Barierr
   layers:
   - Default
   - TransparentFX

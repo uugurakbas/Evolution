@@ -6,14 +6,13 @@ public class Move : MonoBehaviour
 {
     public int moveSpeed = 10, rightLeftSpeed = 100;
     Vector3 lastMousePos, firstMousePos;
-    public float bounds = 5;
+    public float bounds = 4;
+    public bool timeSc;
 
     void Update()
     {
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -bounds, bounds), transform.position.y, transform.position.z);
         transform.position += transform.forward * Time.deltaTime * moveSpeed;
-
-
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -31,6 +30,12 @@ public class Move : MonoBehaviour
             Vector3 dif = lastMousePos - firstMousePos;
             transform.position += new Vector3(dif.x, 0, 0) * Time.deltaTime * rightLeftSpeed;
             firstMousePos = lastMousePos;
+        }
+
+        timeSc = GameObject.FindWithTag("Player").GetComponent<PlayerController>().timeSc;
+        if (timeSc == false)
+        {
+            moveSpeed = 0;
         }
     }
 }

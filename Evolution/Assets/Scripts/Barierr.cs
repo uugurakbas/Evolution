@@ -12,7 +12,7 @@ public class Barierr : MonoBehaviour
     void Awake()
     {
         Player = GameObject.FindWithTag("Player");
-        Text.text = barrierForce.ToString();
+        
     }
 
 
@@ -21,17 +21,19 @@ public class Barierr : MonoBehaviour
         years = Player.GetComponent<PlayerController>().years;
         people = Player.GetComponent<PlayerController>().people;
 
-        Force = (years / 25);
+        Force = (years / 50) * 2;
+        Text.text = barrierForce.ToString();
     }
-    private void OnCollisionEnter(Collision collision)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Clone")
+        if (other.gameObject.tag == "Clone")
         {
             barrierForce = barrierForce - Force;
             if (barrierForce <= 0)
             {
                 Destroy(this.gameObject);
-                Destroy(collision.gameObject);
+                Destroy(other.gameObject);
             }
         }
     }

@@ -7,10 +7,10 @@ using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviour
 {
 
-    public int years = 0, yearsPlus, people = 0, peoplePlus;
+    public int years = 0, yearsPlus, people = 0, peoplePlus,speed;
 
     [HideInInspector] public GameObject Clone;
-    [HideInInspector] public bool  TriggerActive = false;
+    [HideInInspector] public bool  TriggerActive = false, timeSc = true, GameOver = false, Complated = false;
     [HideInInspector] public Rigidbody rb;
 
 
@@ -20,10 +20,22 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    
-    void Update()
-    {
 
+
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            timeSc = false;
+            GameOver = true;
+        }
+        if(collision.gameObject.tag == "Barierr")
+        {
+            timeSc = false;
+            Complated = true;
+
+        }
     }
     public void OnTriggerEnter(Collider other)
     {
@@ -60,8 +72,8 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "BarierrsPlane")
         {
-            Debug.Log("geldi");
             Destroy(GameObject.FindWithTag("ClonePlayer"));
+            Destroy(GameObject.FindWithTag("Clone"));
         }
     }
 

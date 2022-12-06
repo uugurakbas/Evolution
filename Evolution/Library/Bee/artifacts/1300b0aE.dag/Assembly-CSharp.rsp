@@ -360,6 +360,7 @@
 "Assets/Scripts/Barierr.cs"
 "Assets/Scripts/CameraMovement.cs"
 "Assets/Scripts/Enemy.cs"
+"Assets/Scripts/GameManager.cs"
 "Assets/Scripts/Move.cs"
 "Assets/Scripts/PlayerClone.cs"
 "Assets/Scripts/PlayerController.cs"

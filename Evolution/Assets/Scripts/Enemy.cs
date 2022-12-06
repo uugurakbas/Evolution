@@ -17,12 +17,21 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "ClonePlayer" || collision.gameObject.tag == "Clone")
+        if (collision.gameObject.tag == "ClonePlayer")
         {
             Destroy(collision.gameObject);
             Destroy(this.gameObject);
         }
 
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Clone")
+        {
+            Destroy(other.gameObject);
+            Destroy(this.gameObject);
+        }
     }
 }
