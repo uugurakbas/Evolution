@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
 
     public int years = 0, yearsPlus, people = 0, peoplePlus,speed;
+    public TextMeshPro yearsText;
+    public bool multiplied = false;
 
     [HideInInspector] public GameObject Clone;
-    [HideInInspector] public bool  TriggerActive = false, timeSc = true, GameOver = false, Complated = false;
+    [HideInInspector] public bool  TriggerActive = false, timeSc = true, GameOver = false, Complated = false ;
     [HideInInspector] public Rigidbody rb;
+
 
 
     void Awake()
@@ -19,7 +23,10 @@ public class PlayerController : MonoBehaviour
         rb = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
 
     }
-
+    private void Update()
+    {
+        yearsText.text = years.ToString();
+    }
 
 
 
@@ -43,9 +50,18 @@ public class PlayerController : MonoBehaviour
         {
            if(TriggerActive == false)
             {
+                multiplied = other.GetComponent<Years_People>().multiplied;
                 yearsPlus = other.GetComponent<Years_People>().YearsPlus;
                 Destroy(other.gameObject);
-                years = yearsPlus + years;
+                if(multiplied)
+                {
+                    years = yearsPlus * years;
+                }
+                else
+                {
+                    years = yearsPlus + years;
+                }
+
                 Debug.Log(years + "Yýl");
                 StartCoroutine(TrActive());
             }
@@ -55,10 +71,30 @@ public class PlayerController : MonoBehaviour
         {
             if(TriggerActive == false)
             {
+                multiplied = other.GetComponent<Years_People>().multiplied;
                 peoplePlus = other.GetComponent<Years_People>().PeoplePlus;
                 Destroy(other.gameObject);
-                people = peoplePlus + people;
-                gameObject.GetComponent<PlayerClone>().Clone();
+                if (multiplied)
+                {
+                    gameObject.GetComponent<PlayerClone>().CloneMultiplied();
+                    if (people == 0) 
+                    {
+                        people = peoplePlus * 1;
+                    }
+                    else
+                    {
+                        people = peoplePlus * people;
+                    }
+
+
+                }
+                else
+                {
+                    gameObject.GetComponent<PlayerClone>().ClonePlus();
+                    people = peoplePlus + people;
+
+                }
+
                 Debug.Log(people+"Kiþi");
                 StartCoroutine(TrActive());
             }

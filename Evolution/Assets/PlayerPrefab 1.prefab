@@ -103,6 +103,7 @@ MonoBehaviour:
   moveSpeed: 10
   rightLeftSpeed: 100
   bounds: 5
+  timeSc: 0
 --- !u!136 &2971102026644387418
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -150,8 +151,9 @@ MonoBehaviour:
   - {fileID: 2533648261611998199, guid: b4186fb10f970c843a6c0bc3248fb54f, type: 3}
   - {fileID: 0}
   CloneTransform: {fileID: 2971102026708691737}
-  Clone: {fileID: 0}
+  timeSc: 0
   active: 1
+  Clone: {fileID: 0}
   i: 0
   years: 0
 --- !u!1 &2971102026708691738
